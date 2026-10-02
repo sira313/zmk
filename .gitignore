@@ -1,0 +1,19 @@
+# west workspace + ZMK/Zephyr sources (checkout ulang, lihat README)
+app/
+
+# Zephyr SDK (1.5 GB, install ulang lewat west, lihat README)
+sdk/
+
+# python venv (west, pyelftools, cmake<4, wget shim)
+.venv/
+
+# build output
+build/
+*.uf2
+*.elf
+*.hex
+
+# log & cache
+*.log
+__pycache__/
+.cache/
