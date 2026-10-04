@@ -1,0 +1,10 @@
+{
+  "git.autoRepositoryDetection": false,
+  "git.ignoredRepositories": ["app/zephyr"],
+  "files.watcherExclude": {
+    "**/app/**": true,
+    "**/sdk/**": true,
+    "**/.venv/**": true,
+    "**/build/**": true
+  }
+}
