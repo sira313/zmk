@@ -15,7 +15,7 @@
 #include <dt-bindings/zmk/bt.h>
 
 #ifndef ZMK_POINTING_DEFAULT_MOVE_VAL
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 750
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 700
 #endif
 
 #ifndef ZMK_POINTING_DEFAULT_SCRL_VAL
