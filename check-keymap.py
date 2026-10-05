@@ -118,10 +118,14 @@ def main(path, svg_path):
                 bad += 1
                 continue
             for col, (cell, have) in enumerate(zip(cells, brow), start=1):
-                want = MAP.get(cell.strip(), "&trans")
-                if want != have:
+                label = cell.strip()
+                # ponytail: sel kosong terima &trans atau &none; kalau butuh
+                # Bedakan strict, ganti label kosong jadi "NONE" + MAP["NONE"].
+                want = ({MAP[label]} if label in MAP
+                        else {"&trans", "&none"} if not label else {"&trans"})
+                if have not in want:
                     print(f"[{name}] baris {i} kolom {col}: comment "
-                          f"'{cell.strip() or '-'}' -> harus {want}, di file {have}")
+                          f"'{label or '-'}' -> harus {'/'.join(sorted(want))}, di file {have}")
                     bad += 1
     bad += check_svg(path, svg_path)
     print("SEMUA COCOK" if not bad else f"{bad} sel beda")
