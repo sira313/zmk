@@ -12,6 +12,8 @@ firmware ZMK, dibangun penuh di lokal (Arch Linux, tanpa Docker).
 | `config/corne_right.keymap` | symlink ke `corne_left.keymap` |
 | `build.sh` | build firmware (`./build.sh left\|right\|all`) |
 | `flash.sh` | build + flash interaktif via UF2 |
+| `check-keymap.py` | cek diagram comment vs `bindings` di keymap, dan label vs `map.svg` |
+| `map.svg` | peta tombol 4 layer (dihasilkan dari keymap, siap dicetak) |
 | `.gitignore` | menutupi west workspace, venv, hasil build |
 
 Source ZMK/Zephyr dan SDK **tidak** ikut di-commit (ratusan MB). Ikuti langkah
@@ -123,6 +125,28 @@ mouse + sleep saja.
 | 3 | mouse: `E` atas, `S` kiri, `D` bawah, `F` kanan, `J` klik kiri, `K` klik kanan, scroll, `MB3-5` |
 
 Akses layer 3: tekan-tahan `MO` di thumb (menyisakan layer 2 di thumb sebelahnya).
+
+## Peta tombol
+
+![Peta tombol Corne 4 layer](map.svg)
+
+Kanvas transparan, jadi aman dicetak di kertas putih. Legenda:
+
+| Penanda | Arti |
+|---|---|
+| shadow | tombol hold-tap — perlu ditahan (`&mt`), contoh `'/SFT`, `ES/CTL`, `SPC/ENT` |
+| outline kuning | tombol yang mengaktifkan layer aktif (Lower→`LWR`, Raise→`RSE`, Mouse→`&mo3`) |
+| garis putus-putus tengah | pemisah half kiri dan kanan |
+
+Peta ini dibuat dari `config/corne_left.keymap`, jadi selalu ikut dengan isi
+keymap. Setelah edit keymap, cek keduanya sekaligus:
+
+```bash
+python3 check-keymap.py   # bandingkan comment vs bindings, lalu bindings vs map.svg
+```
+
+Label baru yang tidak ada di `MAP` (`check-keymap.py`) akan dianggap `&trans` dan
+memicu mismatch — tambah entri `MAP`-nya lebih dulu.
 
 ## Catatan penting
 

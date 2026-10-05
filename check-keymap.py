@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 """
-Bandingkan baris comment (`// | ... |`) dengan baris `bindings` di keymap ZMK.
+Bandingkan baris comment (`// | ... |`) dengan baris `bindings` di keymap ZMK,
+lalu bandingkan juga label di map.svg dengan comment yang sama.
 
-Pakai: python3 check-keymap.py [path]
+Pakai: python3 check-keymap.py [path-keymap] [path-svg]
 Exit 0 = semua cocok, 1 = ada sel yang beda.
 """
 import re
 import sys
+import xml.etree.ElementTree as ET
+
+SVG = "{http://www.w3.org/2000/svg}"
 
 MAP = {
     "BSPC": "&kp BSPC", "TAB": "&kp TAB", "SHFT": "&kp LSHFT", "CTRL": "&kp LCTRL",
-    "ALT": "&kp LALT", "OPT": "&kp LALT", "MENU": "&kp K_MENU", "GUI": "&kp LGUI", "ENT": "&kp RET", "RSE": "&mo 2",
+    "ALT": "&kp LALT", "OPT": "&kp LALT", "MENU": "&kp K_CONTEXT_MENU", "GUI": "&kp LGUI", "ENT": "&kp RET", "RSE": "&mo 2",
     "LWR": "&mo 1", "&mo3": "&mo 3", "SPC/ENT": "&mt_space RET SPACE",
     "CAPS": "&kp CAPS", "DEL": "&kp DEL", "PRTSC": "&kp PRINTSCREEN",
     "BRUP": "&kp C_BRI_UP", "BRDN": "&kp C_BRI_DN",
@@ -51,7 +55,56 @@ def parse_bindings(line):
     return out
 
 
-def main(path):
+def comment_cells(path):
+    """-> [(layer_name, [label per key])] dari diagram comment, urut layer di file."""
+    src = open(path).read()
+    out = []
+    for name, body in re.findall(r"(\w+_layer)\s*\{(.*?)\n                \};", src, re.S):
+        cells = []
+        for line in body.splitlines():
+            s = line.strip()
+            if s.startswith("//"):
+                cells += [(c.strip() or "-") for c in s.split("//", 1)[1].split("|")[1:-1]]
+        out.append((name, cells))
+    return out
+
+
+def svg_labels(path):
+    """-> [(layer_title, [label per key])] dari map.svg, urut dokumen."""
+    root = ET.parse(path).getroot()
+    out, title, labels = [], None, []
+    for g in root.iter():
+        if g.tag == SVG + "text" and g.get("font-weight") == "bold":
+            if title is not None:
+                out.append((title, labels))
+            title, labels = (g.text or "").strip(), []
+        elif g.tag == SVG + "g":
+            for t in g.iter(SVG + "text"):
+                labels.append((t.text or "").strip() or "-")
+    if title is not None:
+        out.append((title, labels))
+    return out
+
+
+def check_svg(keymap, svg):
+    bad = 0
+    km, sv = comment_cells(keymap), svg_labels(svg)
+    if len(km) != len(sv):
+        print(f"[svg] {len(km)} layer di keymap, {len(sv)} di svg -> JUMLAH BEDA")
+        bad += 1
+    for (name, want), (title, have) in zip(km, sv):
+        if len(want) != len(have):
+            print(f"[svg] '{title}': {len(have)} key, keymap punya {len(want)} -> JUMLAH BEDA")
+            bad += 1
+            continue
+        for i, (w, h) in enumerate(zip(want, have), start=1):
+            if w != h:
+                print(f"[svg] '{title}' key {i}: keymap '{w}', svg '{h}'")
+                bad += 1
+    return bad
+
+
+def main(path, svg_path):
     src = open(path).read()
     bad = 0
     for name, body in re.findall(r"(\w+_layer)\s*\{(.*?)\n                \};", src, re.S):
@@ -70,9 +123,12 @@ def main(path):
                     print(f"[{name}] baris {i} kolom {col}: comment "
                           f"'{cell.strip() or '-'}' -> harus {want}, di file {have}")
                     bad += 1
+    bad += check_svg(path, svg_path)
     print("SEMUA COCOK" if not bad else f"{bad} sel beda")
     return 1 if bad else 0
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1] if len(sys.argv) > 1 else "config/corne_left.keymap"))
+    argv = sys.argv[1:]
+    sys.exit(main(argv[0] if argv else "config/corne_left.keymap",
+                  argv[1] if len(argv) > 1 else "map.svg"))
