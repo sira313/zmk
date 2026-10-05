@@ -25,6 +25,17 @@
 #include <dt-bindings/zmk/pointing.h>
 
 / {
+        behaviors {
+                mt_space: mod_tap_space {
+                        compatible = "zmk,behavior-hold-tap";
+                        #binding-cells = <2>;
+                        flavor = "tap-preferred";
+                        tapping-term-ms = <200>;
+                        bindings = <&kp>, <&kp>;
+                        display-name = "Space/Enter";
+                };
+        };
+
         keymap {
                 compatible = "zmk,keymap";
 
@@ -38,7 +49,7 @@
    &kp TAB   &kp Q   &kp W   &kp E   &kp R   &kp T    &kp Y   &kp U  &kp I  &kp O  &kp P  &kp BSPC
    &kp LSHFT &kp A   &kp S   &kp D   &kp F   &kp G    &kp H   &kp J  &kp K  &kp L  &kp SEMI &mt LSHFT SQT
    &kp LCTRL &kp Z   &kp X   &kp C   &kp V   &kp B    &kp N   &kp M  &kp COMMA &kp DOT &kp FSLH &mt LCTRL ESC
-                   &kp LALT &mo 1 &mt RET SPACE &mo 3 &mo 2 &kp LGUI
+                   &kp LALT &mo 1 &mt_space RET SPACE &mo 3 &mo 2 &kp LGUI
                         >;
                 };
 
@@ -52,7 +63,7 @@
    &kp TAB   &kp N1  &kp N2  &kp N3  &kp N4  &kp N5   &kp N6  &kp N7  &kp N8  &kp N9  &kp N0  &kp BSPC
    &kp LSHFT &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4 &kp K_MENU &kp LEFT &kp UP &kp DOWN &kp RIGHT &trans
    &kp LCTRL &studio_unlock &trans &trans &bt BT_CLR &trans &trans &trans &trans &trans &trans &trans
-                   &kp LALT &mo 1 &mt RET SPACE &mo 3 &mo 2 &kp LGUI
+                   &kp LALT &mo 1 &mt_space RET SPACE &mo 3 &mo 2 &kp LGUI
                         >;
                 };
 
@@ -66,7 +77,7 @@
    &kp TAB   &kp EXCL &kp AT &kp HASH &kp DLLR &kp PRCNT &kp CARET &kp AMPS &kp ASTRK &kp LPAR &kp RPAR &kp DEL
    &kp CAPS  &trans   &kp PRINTSCREEN &kp C_BRI_DN &kp C_BRI_UP &trans &kp MINUS &kp EQUAL &kp LBKT &kp RBKT &kp BSLH &kp GRAVE
    &kp LCTRL &trans   &trans &kp K_VOL_DN &kp K_VOL_UP &trans &kp UNDER &kp PLUS &kp LBRC &kp RBRC &kp PIPE &kp TILDE
-                   &kp LALT &mo 1 &mt RET SPACE &mo 3 &mo 2 &kp LGUI
+                   &kp LALT &mo 1 &mt_space RET SPACE &mo 3 &mo 2 &kp LGUI
                         >;
                 };
 

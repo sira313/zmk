@@ -11,7 +11,7 @@ import sys
 MAP = {
     "BSPC": "&kp BSPC", "TAB": "&kp TAB", "SHFT": "&kp LSHFT", "CTRL": "&kp LCTRL",
     "ALT": "&kp LALT", "OPT": "&kp LALT", "MENU": "&kp K_MENU", "GUI": "&kp LGUI", "ENT": "&kp RET", "RSE": "&mo 2",
-    "LWR": "&mo 1", "&mo3": "&mo 3", "SPC/ENT": "&mt RET SPACE",
+    "LWR": "&mo 1", "&mo3": "&mo 3", "SPC/ENT": "&mt_space RET SPACE",
     "CAPS": "&kp CAPS", "DEL": "&kp DEL", "PRTSC": "&kp PRINTSCREEN",
     "BRUP": "&kp C_BRI_UP", "BRDN": "&kp C_BRI_DN",
     "VOLUP": "&kp K_VOL_UP", "VOLDN": "&kp K_VOL_DN",
