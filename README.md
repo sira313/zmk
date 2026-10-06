@@ -130,13 +130,11 @@ Akses layer 3: tekan-tahan `MO` di thumb (menyisakan layer 2 di thumb sebelahnya
 
 ![Peta tombol Corne 4 layer](map.svg)
 
-Kanvas transparan, jadi aman dicetak di kertas putih. Legenda:
 
 | Penanda | Arti |
 |---|---|
 | shadow | tombol hold-tap — perlu ditahan (`&mt`), contoh `'/SFT`, `ES/CTL`, `SPC/ENT` |
 | outline kuning | tombol yang mengaktifkan layer aktif (Lower→`LWR`, Raise→`RSE`, Mouse→`&mo3`) |
-| garis putus-putus tengah | pemisah half kiri dan kanan |
 
 Peta ini dibuat dari `config/corne_left.keymap`, jadi selalu ikut dengan isi
 keymap. Setelah edit keymap, cek keduanya sekaligus:
