@@ -14,17 +14,41 @@
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
 
-#ifndef ZMK_POINTING_DEFAULT_MOVE_VAL
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 700
+        #ifndef ZMK_POINTING_DEFAULT_MOVE_VAL
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 900
 #endif
 
 #ifndef ZMK_POINTING_DEFAULT_SCRL_VAL
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 20
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 25
 #endif
 
+#include <zephyr/dt-bindings/input/input-event-codes.h>
 #include <dt-bindings/zmk/pointing.h>
+#include <input/processors.dtsi>
 
 / {
+        behaviors {
+                /omit-if-no-ref/ mmv {
+                        compatible = "zmk,behavior-input-two-axis";
+                        #binding-cells = <1>;
+                        x-input-code = <INPUT_REL_X>;
+                        y-input-code = <INPUT_REL_Y>;
+                        time-to-max-speed-ms = <250>;
+                        acceleration-exponent = <2>;
+                        input-processors = <&zip_xy_scaler 8 5>;
+                };
+
+                /omit-if-no-ref/ msc {
+                        compatible = "zmk,behavior-input-two-axis";
+                        #binding-cells = <1>;
+                        x-input-code = <INPUT_REL_HWHEEL>;
+                        y-input-code = <INPUT_REL_WHEEL>;
+                        time-to-max-speed-ms = <250>;
+                        acceleration-exponent = <1>;
+                        input-processors = <&zip_scroll_scaler 11 5>;
+                };
+        };
+
         keymap {
                 compatible = "zmk,keymap";
 
